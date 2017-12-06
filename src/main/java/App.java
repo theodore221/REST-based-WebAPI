@@ -52,7 +52,9 @@ public class App {
             Part filePart = req.raw().getPart("myfile");
             String fileName = filePart.getSubmittedFileName();
 
-
+            /*
+            If the uploaded file is an image file, inputs file into the upload folder
+             */
             if(filePart.getContentType().contains("image")){
                 Image image = new Image(fileName,outFolderPath+fileName);
                 try (InputStream inputStream = filePart.getInputStream()) {
@@ -60,17 +62,17 @@ public class App {
                     IOUtils.copy(inputStream, outputStream);
                     outputStream.close();
                 }
-
-
                 model.put("filename", fileName);
                 return new ModelAndView(model, "sucess.hbs");
             }else {
 
+                /*
+                If uploaded file is a ZIP, unzips individual image files and adds to upload
+                 */
+
                 if (filePart.getContentType().contains("zip")) {
-                    System.out.println("Inside Zip Method");
+
                     byte[] buffer = new byte[1024];
-
-
 
                     ZipInputStream zStream = new ZipInputStream(filePart.getInputStream());
                     ZipEntry zEntry = zStream.getNextEntry();
@@ -79,11 +81,8 @@ public class App {
 
                         String zipName = zEntry.getName();
                         Image image = new Image(zEntry.getName(),outFolderPath+zEntry.getName());
+
                         File newFile = new File("upload" + "/" + zipName);
-                        System.out.println("file unzip: " + newFile.getAbsoluteFile());
-
-                        new File(newFile.getParent()).mkdirs();
-
                         FileOutputStream fStream = new FileOutputStream((newFile));
 
                         int len;
@@ -98,13 +97,8 @@ public class App {
                     zStream.closeEntry();
                     zStream.close();
 
-                    System.out.println("Done");
-
                     return new ModelAndView(model, "sucess.hbs");
-
-
                 } else {
-
                     return new ModelAndView(model, "notImage.hbs");
                 }
             }
@@ -113,9 +107,10 @@ public class App {
 
         /*
         Route that allows users to view new and existing uploads
-        Users get a list of file names related to each uploade
+        Users get a list of file names related to each upload
 
-        ** Was not able to link the uploaded pictures to the anchor tags
+        ** Was not able to link the uploaded pictures to the anchor tags in my template files
+        * Wasn't exactly sure how to link within the template and file path to link the image
          */
         post("/viewImageList", (request, response) -> {
             Map<String, ArrayList<Image>> model = new HashMap<>();
@@ -128,7 +123,5 @@ public class App {
 
     }
 
-    public static void fileUnzip(String zFile, String zOutFolder){
 
-    }
 }

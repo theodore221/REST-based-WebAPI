@@ -1,5 +1,8 @@
 import java.util.ArrayList;
-
+/*
+Image Class,
+All uploaded images have a image object created to keep track of all images
+ */
 public class Image {
 
     private String name;
@@ -12,7 +15,9 @@ public class Image {
         this.filePath = filePath;
         Images.add(this);
     }
-
+/*
+Basic getter functions
+ */
     public String getName(){
         return name;
     }
@@ -20,7 +25,9 @@ public class Image {
     public String getfilePath(){
         return filePath;
     }
-
+/*
+Returns list of image objects
+ */
     public static ArrayList<Image> getAll() {
         return Images;
     }
