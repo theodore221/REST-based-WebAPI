@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>The Service</title>
+    <link rel='stylesheet'  href='https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'>
+</head>
+<body>
+<center>
+<h2>Your Photos</h2>
+<hr>
+</center>
+{{#each myImages}}
+
+<div>
+<img src='{{filePath}}' />
+<a href="{{filePath}}">{{name}}</a>
+<br>
+</div>
+
+{{/each}}
+
+<hr>
+<center>
+<div>
+<a href="/">Upload another image</a>
+</div>
+</center>
+
+</body>
+</html>
